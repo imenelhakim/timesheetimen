@@ -5,13 +5,13 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.validation.constraints.Pattern;
 
-import org.ocpsoft.rewrite.annotation.Join;
-import org.ocpsoft.rewrite.el.ELBeanName;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.spring.entities.Contrat;
 import tn.esprit.spring.entities.Employe;
@@ -22,14 +22,21 @@ import tn.esprit.spring.entities.Timesheet;
 import tn.esprit.spring.services.IEmployeService;
 
 
-@Scope(value = "session")
-@Controller(value = "employeController")
-@ELBeanName(value = "employeController")
-@Join(path = "/", to = "/login.jsf")
+//@Scope(value = "session")
+//@Controller(value = "employeController")
+//@ELBeanName(value = "employeController")
+//@Join(path = "/", to = "/login.jsf")
+
+@RestController
+@RequestMapping("/employe")
 public class ControllerEmployeImpl  {
 
 	@Autowired
 	IEmployeService employeService;
+	
+	private String loginFile ="/login.xhtml?faces-redirect=true";
+	private String notLoggedIn;
+	
 
 	private String login; 
 	private String password; 
@@ -66,27 +73,32 @@ public class ControllerEmployeImpl  {
 		}
 		return navigateTo;	
 	}
+	
+	
+	public String notLoggedin() {
+		if (authenticatedUser==null || !loggedIn) 
+			return loginFile;
+		return notLoggedIn;
+	}
+	
 
+	
 	public String doLogout()
 	{
 		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 	
-	return "/login.xhtml?faces-redirect=true";
+	return loginFile;
 	}
 
 
 	public String addEmploye() {
-
-		if (authenticatedUser==null || !loggedIn) return "/login.xhtml?faces-redirect=true";
-
 		employeService.addOrUpdateEmploye(new Employe(nom, prenom, email, password, actif, role)); 
 		return "null"; 
 	}  
 
-	public String removeEmploye(int employeId) {
+	@DeleteMapping("/deleteEmp/{employeId}")
+	public String removeEmploye(@PathVariable int employeId) {
 		String navigateTo = "null";
-		if (authenticatedUser==null || !loggedIn) return "/login.xhtml?faces-redirect=true";
-
 		employeService.deleteEmployeById(employeId);
 		return navigateTo; 
 	} 
@@ -94,7 +106,6 @@ public class ControllerEmployeImpl  {
 	public String displayEmploye(Employe empl) 
 	{
 		String navigateTo = "null";
-		if (authenticatedUser==null || !loggedIn) return "/login.xhtml?faces-redirect=true";
 
 
 		this.setPrenom(empl.getPrenom());
@@ -112,8 +123,6 @@ public class ControllerEmployeImpl  {
 	public String updateEmploye() 
 	{ 
 		String navigateTo = "null";
-		
-		if (authenticatedUser==null || !loggedIn) return "/login.xhtml?faces-redirect=true";
 
 		employeService.addOrUpdateEmploye(new Employe(employeIdToBeUpdated, nom, prenom, email, password, actif, role)); 
 
@@ -194,8 +203,8 @@ public class ControllerEmployeImpl  {
 		employeService.affecterContratAEmploye(contratId, employeId);
 	}
 
-
-	public String getEmployePrenomById(int employeId) {
+	@GetMapping("/getEmpPrenomById/{employeId}")
+	public String getEmployePrenomById(@PathVariable int employeId) {
 		return employeService.getEmployePrenomById(employeId);
 	}
 
