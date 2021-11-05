@@ -3,6 +3,7 @@ package tn.esprit.spring.services;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,10 +45,12 @@ public class EmployeServiceImpl implements IEmployeService {
 
 
 	public void mettreAjourEmailByEmployeId(String email, int employeId) {
-		Employe employe = employeRepository.findById(employeId).get();
-		employe.setEmail(email);
-		employeRepository.save(employe);
-
+		Optional<Employe> employe = employeRepository.findById(employeId);
+		if (employe.isPresent()) {
+			Employe e = employe.get();
+			e.setEmail(email);
+			employeRepository.save(e);
+		}
 	}
 
 	@Transactional	
@@ -161,5 +164,4 @@ public class EmployeServiceImpl implements IEmployeService {
 	public List<Employe> getAllEmployes() {
 		return (List<Employe>) employeRepository.findAll();
 	}
-
 }
