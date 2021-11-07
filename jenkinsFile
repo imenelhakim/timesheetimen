@@ -1,0 +1,20 @@
+pipeline {
+
+    agent any
+    stages{
+        stage('clone and clean repo'){
+            steps {
+                bat "git clone https://github.com/imenelhakim/timesheetimen"
+                bat "mvn clean -f timesheetimen "
+            }
+        }
+        stage('Test'){
+            steps{ bat "mvn test -f timesheetimen"}
+        }
+    }
+    post{
+            always{
+            cleanWs()
+        }
+    }
+}
