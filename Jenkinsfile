@@ -33,17 +33,12 @@ pipeline {
         }
         //build image on docker 
         stage('Building our image') {
-            //bat "cd timesheetimen"
             steps{
-                //dir("C:/Program Files (x86)/Jenkins/workspace/Imen/timesheetimen"){
                 script {
                     dir("timesheetimen"){
                         dockerImage = docker.build registry + ":$BUILD_NUMBER"
-                        //bat "docker build -t timesheetimen ."
                     }
                 }
-                
-                //}
             }
         }
         stage('Deploy our image') {
