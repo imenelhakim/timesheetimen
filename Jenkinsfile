@@ -31,7 +31,6 @@ pipeline {
                 emailext body: 'You just launched a job !', subject: 'Hey Imen !', to: 'imen.devops@gmail.com'
             }
         }
-        //build image on docker 
         stage('Building our image') {
             steps{
                 script {
