@@ -24,7 +24,6 @@ pipeline {
                 bat "mvn sonar:sonar -f timesheetimen -Dsonar.host.url=http://localhost:9000 -Dsonar.login=dfef96fa643c0fa5788b20500106a5cb5fc60516"
             }
         }
-        //send email
         stage('Email'){
             steps{
                 //extended email
