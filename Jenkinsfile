@@ -28,7 +28,7 @@ pipeline {
             steps{
                 //extended email
                 //emailext body: 'You just launched a job !', subject: 'Hey Imen !', to: 'imen.devops@gmail.com'
-                mail bcc: '', body: 'Hello Imen, someone pushed some code and we wanted to notify you !', cc: '', from: '', replyTo: '', subject: 'Your daily build !', to: 'imen.devops@gmail.com'
+                //mail bcc: '', body: 'Hello Imen, someone pushed some code and we wanted to notify you !', cc: '', from: '', replyTo: '', subject: 'Your daily build !', to: 'imen.devops@gmail.com'
             }
         }
         stage('Building our image') {
