@@ -28,7 +28,11 @@ pipeline {
         stage('Email'){
             steps{
                 //extended email
-                emailext body: 'You just launched a job !', subject: 'Hey Imen !', to: 'imen.devops@gmail.com'
+                //emailext body: 'You just launched a job !', subject: 'Hey Imen !', to: 'imen.devops@gmail.com'
+                emailext 
+                body: '''${SCRIPT, template="build-report.groovy"}''',
+                subject: "[Jenkins] REPORT",
+                to: "imen.devops@gmail.com"
             }
         }
         stage('Building our image') {
